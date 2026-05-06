@@ -1,0 +1,12 @@
+[submodule "src/ros_experiment_v2"]
+	path = src/ros_experiment_v2
+	url = https://github.com/helenlu66/ros_experiment_v2.git
+[submodule "src/ros2_asus_xtion"]
+	path = src/ros2_asus_xtion
+	url = https://github.com/mgonzs13/ros2_asus_xtion
+[submodule "AvaGen2-ROS2-Documentation"]
+	path = AvaGen2-ROS2-Documentation
+	url = https://github.com/ogoudey/AvaGen2-ROS2-Documention.git
+[submodule "src/ros2_experiment_v2"]
+	path = src/ros2_experiment_v2
+	url = git@bitbucket.org:avadevteam/ros_experiment_v2.git

@@ -1,0 +1,10 @@
+src/ros_experiment_v2/ava_description
+# ROS 2 / colcon generated artifacts
+build/
+install/
+log/
+
+# vscode
+.vscode/
+.env
+.codex
