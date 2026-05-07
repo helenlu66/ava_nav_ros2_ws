@@ -12,7 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/config', ['config/loading_pose.yaml', 'config/unloading_pose.yaml']),
-        ('share/' + package_name + '/launch', ['launch/loading_goal_router.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/delivery_node.launch.py']),
     ],
     install_requires=['setuptools', 'PyYAML'],
     zip_safe=True,
@@ -22,7 +22,7 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
-            'delivery_router = nav2_demo.delivery_router:main',
+            'delivery_node = nav2_demo.delivery_node:main',
         ],
     },
 )
