@@ -1,0 +1,7 @@
+frame_id: map
+position:
+  x: 0.500
+  y: -0.100
+  z: 0.010
+orientation:
+  yaw: 0.0
