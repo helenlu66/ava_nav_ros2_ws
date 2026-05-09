@@ -53,7 +53,40 @@ ros2 launch nav2_demo nav2_demo.launch.py
 
 ---
 
-Note that [src/ros_experiment_v2](src/ros_experiment_v2)  is a private repo developed by the AVA team for the HRI lab. 
+## Repository Structure
 
-## Building the map
-Refer to [AvaGen2-ROS2-Documentation/README.md](AvaGen2-ROS2-Documentation/README.md) for how to build the map
+```
+ros2_ws/
+├── src/                                              # ROS 2 package source code
+│   ├── ros2_asus_xtion/                            # ASUS Xtion drivers [submodule]
+│   ├── ava_description/                            # AVA robot URDF descriptions
+│   ├── interfaces/                                 # ROS 2 custom message/service definitions
+│   ├── nav2_demo/                                  # Nav2 demonstration package
+│   ├── spm/                                        # Spatial Mapping package
+│   ├── ros_experiment_v2/                          # Private AVA team development [submodule]
+│   └── ros2_experiment_v2/                         # Additional experiment package [submodule]
+│
+├── AvaGen2-ROS2-Documentation/                     # AVA Gen2 documentation [submodule]
+├── hri_main_lab_map_*.yaml                         # Map configuration files for navigation
+├── hri_main_lab_map_*.pgm                          # Map occupancy grid images
+└── README.md                                        # This file
+```
+
+**Submodules:**
+- [ros2_asus_xtion](https://github.com/mgonzs13/ros2_asus_xtion) — ASUS Xtion sensor drivers
+- [ros_experiment_v2](https://github.com/helenlu66/ros_experiment_v2) — Private AVA team development
+- [AvaGen2-ROS2-Documentation](https://github.com/ogoudey/AvaGen2-ROS2-Documention) — Robot documentation
+
+**Key Notes:**
+- Map files (`*.yaml` and `*.pgm`) are used with Nav2 for autonomous navigation
+- Use `git submodule update --init --recursive` to pull all submodules
+
+---
+
+## Building the Map
+
+Refer to [AvaGen2-ROS2-Documentation/README.md](AvaGen2-ROS2-Documentation/README.md) for instructions on building maps.
+
+---
+
+Note that [src/ros_experiment_v2](src/ros_experiment_v2)  is a private repo developed by the AVA team for the HRI lab.
