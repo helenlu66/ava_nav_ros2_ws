@@ -53,7 +53,7 @@ ros2 launch nav2_demo nav2_demo.launch.py
 
 ---
 
-Note that ![ava ros2 setup](src/ros_experiment_v2) is a private repo developed by the AVA team for the HRI lab. 
+Note that [src/ros_experiment_v2](src/ros_experiment_v2)  is a private repo developed by the AVA team for the HRI lab. 
 
 ## Building the map
-Refer to ![AVA README](AvaGen2-ROS2-Documentation/README.md) for how to build the map
+Refer to [AvaGen2-ROS2-Documentation/README.md](AvaGen2-ROS2-Documentation/README.md) for how to build the map
