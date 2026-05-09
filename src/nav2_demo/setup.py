@@ -12,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/config', ['config/loading_pose.yaml', 'config/unloading_pose.yaml']),
+        ('share/' + package_name + '/config', ['config/delivery_fastdds_peers.xml']),
         ('share/' + package_name + '/launch', ['launch/delivery_node.launch.py']),
     ],
     install_requires=['setuptools', 'PyYAML'],

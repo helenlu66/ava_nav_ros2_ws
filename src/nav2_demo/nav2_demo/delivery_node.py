@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 from action_msgs.msg import GoalStatus
 from geometry_msgs.msg import PoseStamped
 from nav2_msgs.action import NavigateToPose
-from nav2_demo_interfaces.action import Delivery
+from interfaces.action import Delivery
 from rclpy.action import ActionClient, ActionServer, CancelResponse, GoalResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
@@ -28,11 +28,13 @@ class DeliveryNode(Node):
         self.declare_parameter('frame_id', 'map')
         self.declare_parameter('delivery_action_name', 'deliver')
         self.declare_parameter('nav2_action_name', 'navigate_to_pose')
+        self.declare_parameter('dry_run', False)
 
         self._callback_group = ReentrantCallbackGroup()
 
         loading_file = self.get_parameter('loading_pose_file').value
         unloading_file = self.get_parameter('unloading_pose_file').value
+        self._dry_run = bool(self.get_parameter('dry_run').value)
         self._loading_pose = self._load_single_pose(loading_file)
         self._unloading_pose = self._load_single_pose(unloading_file)
         self._action_client = ActionClient(
@@ -55,6 +57,9 @@ class DeliveryNode(Node):
             f"DeliveryNode ready, serving '{self.get_parameter('delivery_action_name').value}' "
             f"and forwarding to Nav2 action '{self.get_parameter('nav2_action_name').value}'."
         )
+        self.get_logger().info(f"Dry-run mode: {self._dry_run}")
+        self.get_logger().info(f"Loaded loading pose: {self._pose_to_log_string(self._loading_pose)}")
+        self.get_logger().info(f"Loaded unloading pose: {self._pose_to_log_string(self._unloading_pose)}")
 
     def _load_single_pose(self, pose_file: str):
         path = Path(pose_file)
@@ -64,6 +69,23 @@ class DeliveryNode(Node):
         with path.open('r', encoding='utf-8') as handle:
             data = yaml.safe_load(handle)
         return data
+
+    def _pose_to_log_string(self, pose_data: dict) -> str:
+        frame = pose_data.get('frame_id', self.get_parameter('frame_id').value)
+        position = pose_data.get('position', {})
+        orientation = pose_data.get('orientation', {})
+        if 'yaw' in orientation:
+            orientation_text = f"yaw={orientation['yaw']}"
+        else:
+            orientation_text = (
+                f"x={orientation.get('x', 0.0)}, y={orientation.get('y', 0.0)}, "
+                f"z={orientation.get('z', 0.0)}, w={orientation.get('w', 1.0)}"
+            )
+        return (
+            f"frame={frame}, "
+            f"x={position.get('x', 0.0)}, y={position.get('y', 0.0)}, z={position.get('z', 0.0)}, "
+            f"orientation({orientation_text})"
+        )
 
     def make_pose_stamped(self, pose_data: dict) -> PoseStamped:
         pose = PoseStamped()
@@ -115,6 +137,15 @@ class DeliveryNode(Node):
             result.success = False
             result.message = f"Unknown target '{target}'"
             goal_handle.abort()
+            return result
+
+        self.get_logger().info(f"Selected '{target}' pose: {self._pose_to_log_string(pose_data)}")
+
+        if self._dry_run:
+            self._publish_feedback(goal_handle, f"[dry-run] Loaded '{target}' pose and skipped Nav2 goal send")
+            result.success = True
+            result.message = f"[dry-run] '{target}' pose loaded and logged"
+            goal_handle.succeed()
             return result
 
         if not self._action_client.wait_for_server(timeout_sec=10.0):
